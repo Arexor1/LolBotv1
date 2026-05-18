@@ -281,8 +281,7 @@ async def unregister(interaction: discord.Interaction):
 async def leaderboard(interaction: discord.Interaction):
     await interaction.response.send_message(build_leaderboard(db.players()))
 
-
-@bot.tree.command(description="Aktualisiert Elo-Daten und Leaderboard manuell.")
+@bot.tree.command(name="updateelo", description="Aktualisiert alle aktuellen SoloQ Elos")
 async def refresh(interaction: discord.Interaction):
     await interaction.response.defer(ephemeral=True, thinking=True)
     count = await refresh_all_players()
