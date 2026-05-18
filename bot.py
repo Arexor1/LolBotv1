@@ -82,13 +82,8 @@ class RiotClient:
         data = await self._get(url)
         return data["puuid"]
 
-    async def get_summoner_id(self, puuid: str) -> str:
-        url = f"https://{PLATFORM}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}"
-        data = await self._get(url)
-        return data["id"]
-
-    async def get_soloq_entry(self, summoner_id: str) -> Optional[RankedEntry]:
-        url = f"https://{PLATFORM}.api.riotgames.com/lol/league/v4/entries/by-summoner/{summoner_id}"
+    async def get_soloq_entry_by_puuid(self, puuid: str) -> Optional[RankedEntry]:
+        url = f"https://{PLATFORM}.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}"
         entries = await self._get(url)
         for entry in entries:
             if entry.get("queueType") == "RANKED_SOLO_5x5":
@@ -103,8 +98,7 @@ class RiotClient:
 
     async def get_current_soloq(self, game_name: str, tag_line: str) -> Optional[RankedEntry]:
         puuid = await self.get_puuid(game_name, tag_line)
-        summoner_id = await self.get_summoner_id(puuid)
-        return await self.get_soloq_entry(summoner_id)
+        return await self.get_soloq_entry_by_puuid(puuid)
 
 
 class Database:
